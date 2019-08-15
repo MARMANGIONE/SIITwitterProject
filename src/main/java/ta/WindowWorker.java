@@ -1,6 +1,9 @@
 package ta;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import rc.RelevanceCheck;
 import stm.StorageManager;
@@ -40,7 +43,7 @@ public class WindowWorker implements Runnable {
 
 	private boolean satisfyLanguage(Tweet tweet) {
 		if (Acquisition.languageCheck)
-			return Acquisition.languageClassifier.satisfy(tweet.getTerms());
+			return Acquisition.languageClassifier.satisfy(convertToList(tweet.getTerms()));
 		return true;
 	}
 
@@ -57,5 +60,17 @@ public class WindowWorker implements Runnable {
 			if (tweet.containsPhrase(phrase.getText()))
 				phrase.addTweet(tweet);
 		}
+	}
+	
+	// Generic function to convert set to list
+	public static <T> List<T> convertToList(Set<T> set) {
+		// create an empty list
+		List<T> items = new ArrayList<>();
+
+		// push each element in the set into the list
+		for (T e : set)
+			items.add(e);
+		// return the list
+		return items;
 	}
 }

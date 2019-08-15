@@ -1,8 +1,8 @@
-package ml;
+package util;
 
 import java.util.List;
 
-public class util {
+public class MathUtil {
 
 	static int factMult(int f, int c) {
 		if (f >= c)
@@ -11,14 +11,14 @@ public class util {
 		return f * factMult(f + 1, c);
 	}
 
-	static int comb(int k, int n) {
+	public static int comb(int k, int n) {
 		if (n - k > 50)
 			return Integer.MAX_VALUE;
 
 		return factMult(n - k + 1, n) / fact(k);
 	}
 
-	static double cosSim(double[] a, double[] b) {
+	public static double cosSim(double[] a, double[] b) {
 		double dotp = 0, maga = 0, magb = 0;
 
 		for (int i = 0; i < a.length; i++) {
@@ -51,7 +51,7 @@ public class util {
 		return Math.log(docs.size() / n);
 	}
 
-	static double[] normalizeVector(double[] inputV) {
+	public static double[] normalizeVector(double[] inputV) {
 		double[] outputV = new double[inputV.length];
 		double sq = 0;
 		for (double d : inputV)
@@ -62,11 +62,11 @@ public class util {
 		return outputV;
 	}
 
-	static String[] splitText(String input) {
+	public static String[] splitText(String input) {
 		return input.toString().replaceAll("[\\W&&[^\\s]]", "").split("\\W+");
 	}
 
-	static double tf(String[] doc, String term) {
+	public static double tf(String[] doc, String term) {
 		double n = 0;
 		for (String s : doc)
 			if (s.equalsIgnoreCase(term))

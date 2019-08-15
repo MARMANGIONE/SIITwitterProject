@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.Socket;
 
 import lang.EnglishClassifier;
+import lang.ItalianClassifier;
 import lang.LanguageClassifier;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,6 @@ import qg.InterestUpdater;
 import qg.QueryGenerator;
 import stm.StorageManager;
 import twit.TwitterListener;
-import twit.TwitterSimulator;
 import txt.TextNormalizer;
 import conf.ConfigMgr;
 import conf.Interest;
@@ -45,8 +45,7 @@ public class Acquisition implements Runnable {
 	public volatile static Boolean languageCheck;
 	public volatile static LanguageClassifier languageClassifier;
 
-	private static TwitterSimulator simulator;
-	private static final String termCommonnessHost = "sensoria.ics.uci.edu";
+	private static final String termCommonnessHost = "localhost";
 	private static final int termCommonnessPort = 9090;
 
 	private volatile static Acquisition instance = null;
@@ -97,9 +96,7 @@ public class Acquisition implements Runnable {
 		maxNumberStats = Integer.valueOf(ConfigMgr
 				.readConfigurationParameter("AcquisitionMaxNumberStats"));
 
-		if (isSimulating())
-			simulator = new TwitterSimulator();
-
+		
 		running = false;
 
 		TextNormalizer.getInstance();
@@ -129,13 +126,8 @@ public class Acquisition implements Runnable {
 				window = new Window();
 				window.open();
 
-				if (isSimulating()) {
-					getSimulator().start();
-					logger.info("Simulation is started.");
-				} else {
-					startNewListener();
-					logger.info("Listening is started.");
-				}
+				startNewListener();
+				logger.info("Listening is started.");
 
 				synchronized (window) {
 					while (window.isOpen())
@@ -159,11 +151,9 @@ public class Acquisition implements Runnable {
 				Report report = new Report(window, query);
 				StorageManager.storeReport(report);
 
-				if (isSimulating()) {
-					getSimulator().stop();
-				} else {
-					stopListener();
-				}
+				
+				stopListener();
+
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -186,9 +176,6 @@ public class Acquisition implements Runnable {
 		if (running) {
 			running = false;
 
-			if (isSimulating())
-				getSimulator().stop();
-			else
 				listener.stopListening();
 
 			if (t_tl != null) {
@@ -240,6 +227,11 @@ public class Acquisition implements Runnable {
 						.readConfigurationParameter("LanguageCheckThreshold");
 				languageClassifier = EnglishClassifier.getInstance(Double
 						.valueOf(threshold));
+			} else if (language.equals("it")) {
+				String threshold = ConfigMgr
+						.readConfigurationParameter("LanguageCheckThreshold");
+				languageClassifier = ItalianClassifier.getInstance(Double
+						.valueOf(threshold));
 			}
 			Acquisition.languageClassifier = languageClassifier;
 		}
@@ -281,7 +273,4 @@ public class Acquisition implements Runnable {
 		Acquisition.interest.computeFrequencies();
 	}
 
-	public static TwitterSimulator getSimulator() {
-		return simulator;
-	}
 }

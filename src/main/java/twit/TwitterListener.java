@@ -91,6 +91,7 @@ public class TwitterListener implements Runnable {
 		}
 
 		filter.locations(locs);
+		filter.language(new String[]{"en"});
 		twitterStream.filter(filter);
 	}
 

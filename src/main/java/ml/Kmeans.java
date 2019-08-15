@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import util.MathUtil;
+
 import java.util.TreeSet;
 
 public class Kmeans {
@@ -27,7 +30,7 @@ public class Kmeans {
 		List<Integer> rand = new ArrayList<Integer>();
 
 		int numDocs = vecSpace.size();
-		maxInit = Math.min(util.comb(k, numDocs), maxInit);
+		maxInit = Math.min(MathUtil.comb(k, numDocs), maxInit);
 
 		for (int init = 0; init < maxInit; init++) {
 			tempClusters.clear();
@@ -71,7 +74,7 @@ public class Kmeans {
 			for (double[] c : tempClusters.keySet()) {
 				TreeSet<Integer> cl = tempClusters.get(c);
 				for (int vi : cl) {
-					sumsim += util.cosSim(c, vecSpace.get(vi));
+					sumsim += MathUtil.cosSim(c, vecSpace.get(vi));
 				}
 			}
 
@@ -89,7 +92,7 @@ public class Kmeans {
 		for (int i = 0; i < vecSpace.size(); i++) {
 			HashMap<double[], Double> distances = new HashMap<double[], Double>();
 			for (double[] c : clusters.keySet()) {
-				double csim = util.cosSim(c, vecSpace.get(i));
+				double csim = MathUtil.cosSim(c, vecSpace.get(i));
 				distances.put(c, csim);
 			}
 

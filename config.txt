@@ -4,11 +4,12 @@ ConsumerSecret=oqfvx5N8SGV1lDQOm6obtwu0i1lE5Z6WmmgBq4a1Y
 AccessToken=612059824-YaccbVKjoYDc6IwL3GIVErjTT70Tio38J0Pc4DOb
 AccessTokenSecret=GuCChvZjr5DSkyA5VcPx5doU7GTD6HVuKYW42A0RHyQ
 
+
 #Query File Path
 QueryFilePath=./queries.json
 
 #MongoDB
-MongoDBDatabaseHost=sensoria.ics.uci.edu
+MongoDBDatabaseHost=localhost
 MongoDBDatabasePort=27017
 MongoDBDatabase=dataworld
 MongoDBSampleDatabase=sample
@@ -23,7 +24,7 @@ MongoDBResultMetadataCollection=metadata
 MongoDBStoreUserInfo=true
 
 #KnowledgeBase
-KBHost=sensoria.ics.uci.edu
+KBHost=localhost
 KBPort=9090
 
 #AcquisitionModule

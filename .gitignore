@@ -24,3 +24,5 @@ release.properties
 .settings/
 
 .DS_Store
+/bin/
+/build/

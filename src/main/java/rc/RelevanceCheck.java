@@ -47,11 +47,11 @@ public class RelevanceCheck {
 
 		double relevance = rels[2] + ((1 - rels[2]) * rels[1])
 				+ (1 - rels[2] + ((1 - rels[2]) * rels[1])) * rels[0];
-		// logger.info(String.format("%.2f", relevance) + "\t["
-		// + String.format("%.2f", phraseRel) + "\t"
-		// + (cluRel > 0 ? "** " : "   ") + String.format("%.2f", cluRel)
-		// + "\t" + (userRel > 0 ? "** " : "   ")
-		// + String.format("%.2f", userRel) + "]\t" + tweet.getTerms());
+		logger.info(String.format("%.2f", relevance) + "\t["
+		+ String.format("%.2f", phraseRel) + "\t"
+		 + (cluRel > 0 ? "** " : "   ") + String.format("%.2f", cluRel)
+	     + "\t" + (userRel > 0 ? "** " : "   ")
+		 + String.format("%.2f", userRel) + "]\t" + tweet.getTerms());
 
 		return relevance > 1 ? 1 : relevance;
 	}
@@ -65,8 +65,6 @@ public class RelevanceCheck {
 			for (Phrase phrase : phrases) {
 				if (!phrase.isInitial())
 					continue;
-				// todo: check phrase relevance only after certain amount of
-				// certainity
 				double satisfaction = getSatisfaction(tweet, interest, phrase)
 						* phrase.getWeight();
 				if (satisfaction > maxSatisfaction)
@@ -117,9 +115,9 @@ public class RelevanceCheck {
 							/ (double) phrase.getStatistics()
 									.getRelevantTweetCount();
 					count++;
-					// logger.info(phrase.getText() + "\t~\t" + patternStr +
-					// "\t"
-					// + prel);
+					 logger.info(phrase.getText() + "\t~\t" + patternStr +
+					 "\t"
+					 + prel);
 					if (prel > maxRel || maxRel == 0)
 						maxRel = prel;
 					else

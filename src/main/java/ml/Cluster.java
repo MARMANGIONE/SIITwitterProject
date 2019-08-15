@@ -3,6 +3,8 @@ package ml;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.MathUtil;
+
 public class Cluster {
 
 	private int numDims;
@@ -49,7 +51,7 @@ public class Cluster {
 
 	public double getMbs() {
 		double mbs = 0;
-		double[] normWeightedSumVs = util.normalizeVector(getWeightedSumVs());
+		double[] normWeightedSumVs = MathUtil.normalizeVector(getWeightedSumVs());
 		for (int i = 0; i < normWeightedSumVs.length; i++)
 			mbs += (normWeightedSumVs[i] * sumVs.get(i)) / getNumDocs();
 

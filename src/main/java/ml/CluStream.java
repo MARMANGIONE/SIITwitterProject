@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import util.MathUtil;
 import util.SetUtil;
 import conf.Tweet;
 
@@ -75,12 +76,12 @@ public class CluStream {
 				cluster.addDoc(docId, docRel);
 
 				double[] vector = vecSpace.get(docIndex);
-				double[] nVector = util.normalizeVector(vector);
+				double[] nVector = MathUtil.normalizeVector(vector);
 
 				for (int i = 0; i < nVector.length; i++)
 					normSumV[i] += nVector[i];
 
-				double cosSim = util.cosSim(c, vector);
+				double cosSim = MathUtil.cosSim(c, vector);
 				if (cosSim == 0)
 					cosSim = Double.MIN_VALUE;
 				sumCosSim += cosSim;
@@ -154,7 +155,7 @@ public class CluStream {
 	}
 
 	public synchronized double getRelevance(String text) {
-		String[] docTerms = util.splitText(text);
+		String[] docTerms = MathUtil.splitText(text);
 		List<String> existingDocTerms = new ArrayList<String>();
 
 		for (String docTerm : docTerms) {
@@ -172,7 +173,7 @@ public class CluStream {
 		double maxCosSim = 0;
 
 		for (Cluster cluster : getClusters()) {
-			double cosSim = util.cosSim(docVector, cluster.getWeightedSumVs());
+			double cosSim = MathUtil.cosSim(docVector, cluster.getWeightedSumVs());
 			if (cosSim >= maxCosSim || maxCosSim == 0) {
 				maxCosSim = cosSim;
 				destCluster = cluster;
@@ -188,7 +189,7 @@ public class CluStream {
 		double maxCosSim = 0;
 
 		for (Cluster cluster : getClusters()) {
-			double cosSim = util.cosSim(docVector, cluster.getWeightedSumVs());
+			double cosSim = MathUtil.cosSim(docVector, cluster.getWeightedSumVs());
 			if (cosSim >= maxCosSim) {
 				maxCosSim = cosSim;
 				destCluster = cluster;
@@ -205,7 +206,7 @@ public class CluStream {
 			destCluster.addDoc(docId, docRel);
 			destCluster.setSumV(docVector);
 			destCluster.setWeightedSumVs(docVector);
-			destCluster.setNormSumVs(util.normalizeVector(docVector));
+			destCluster.setNormSumVs(MathUtil.normalizeVector(docVector));
 			getClusters().add(destCluster);
 			if (getClusters().size() > maxMicroClusterCount)
 				merge();
@@ -228,7 +229,7 @@ public class CluStream {
 		int i = 0;
 		for (Entry<String, Integer> e : terms.entrySet()) {
 			double preIdf = (double) docCount / (double) e.getValue();
-			vector[i] = util.tf(input, e.getKey()) * Math.log(preIdf);
+			vector[i] = MathUtil.tf(input, e.getKey()) * Math.log(preIdf);
 			i++;
 		}
 
@@ -265,7 +266,7 @@ public class CluStream {
 		public ClusterPair(Cluster c1, Cluster c2) {
 			this.c1 = c1;
 			this.c2 = c2;
-			similarity = util.cosSim(c1.getWeightedSumVs(),
+			similarity = MathUtil.cosSim(c1.getWeightedSumVs(),
 					c2.getWeightedSumVs());
 		}
 	}

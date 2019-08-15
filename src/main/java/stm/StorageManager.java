@@ -1,6 +1,5 @@
 package stm;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,12 +46,7 @@ public class StorageManager implements Runnable {
 				.readConfigurationParameter("MongoDBDatabasePort"));
 
 		MongoClient m = null;
-		try {
-			m = new MongoClient(host, port);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		m = new MongoClient(host, port);
 
 		morphia.map(Tweet.class).map(User.class).map(Interest.class)
 				.map(Report.class);
@@ -123,27 +117,6 @@ public class StorageManager implements Runnable {
 		return null;
 	}
 
-	public synchronized static ArrayList<Tweet> getTopTweets(String interestId) {
-		ArrayList<Tweet> tweets = null;
-		if (datastore != null) {
-			tweets = new ArrayList<Tweet>();
-			Iterator<Tweet> tweetIterator = datastore.createQuery(Tweet.class)
-					.disableValidation().filter("interest =", interestId)
-					.order("-timestamp").limit(50).iterator();
-
-			int count = 10;
-			while (tweetIterator.hasNext() && count > 0) {
-				try {
-					tweets.add(tweetIterator.next());
-					count--;
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
-			}
-		}
-
-		return tweets;
-	}
 
 	public synchronized static Report getLatestReport(String interestId) {
 		if (datastore != null) {
@@ -198,17 +171,6 @@ public class StorageManager implements Runnable {
 	public static void main(String[] args) throws Exception {
 		StorageManager.getInstance();
 		clearAll();
-		
-		// List<Interest> interests = getInterests();
-		// for (Interest interest : interests)
-		// System.out.println(interest.getId());
-
-		// ArrayList<Tweet> tweets = getTopTweets("35");
-		//
-		// for (Tweet t : tweets) {
-		// System.out.println(t.getTimestamp() + " -- " + t.getInterestId()
-		// + " -- " + t.getText());
-		// }
 
 		Report report = getLatestReport("45");
 		System.out.println(report.getStartTime());
@@ -238,7 +200,6 @@ public class StorageManager implements Runnable {
 	}
 
 	public static void storeTweet(Tweet tweet) {
-		// JsonTweet t = new JsonTweet(tweet);
 		Tweet t = tweet;
 		datastore.save(t);
 

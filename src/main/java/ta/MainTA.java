@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import stm.StorageManager;
-import topk.TopK;
 import conf.ConfigMgr;
 import conf.Interest;
 
@@ -22,8 +21,7 @@ public class MainTA {
 		String command = null;
 
 		StorageManager.getInstance();
-		// StorageManager.clearReports();
-		// StorageManager.clearAll();
+
 
 		List<Interest> interests = StorageManager.getInterests();
 		Interest selectedInterest = null;
@@ -97,9 +95,7 @@ public class MainTA {
 
 		logger.info(title);
 
-		// just to get it instantiated
-		new TopK();
-
+		logger.info("If you want to exit the acquisition type \"exit\" ");
 		Acquisition.getInstance();
 		Acquisition.setInterest(selectedInterest);
 		Acquisition.start();
@@ -176,14 +172,6 @@ public class MainTA {
 				if (command.equalsIgnoreCase("tcb"))
 					System.out.println("Total Processing Buffer Tweet Count: "
 							+ Acquisition.getCurrentWindow().getBufferSize());
-
-				if (command.equalsIgnoreCase("ts"))
-					System.out.println("Total Simulation Tweet Count: "
-							+ Acquisition.getSimulator().getTotalCounter());
-
-				if (command.equalsIgnoreCase("tsr"))
-					System.out.println("Total Simulation Matched Tweet Count: "
-							+ Acquisition.getSimulator().getMatchCounter());
 
 				if (command.equalsIgnoreCase("gc"))
 					System.gc();

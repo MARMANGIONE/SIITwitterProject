@@ -17,12 +17,17 @@ public class InterestStorageManager {
 
 	public static void main(String[] args) {
 		StorageManager.getInstance();
+		System.out
+		.println("- In the Interest Manager you can add or remove different Interests to acquire relevant tweets. \n Type \"help\" if you want to know the commands to perform these operations");
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while (true) {
 			try {
 				String s = br.readLine();
 				if (s.equals("help")) {
-					System.out.println("help, show, rm iid, exit, user, add");
+					System.out.println("show,add, rm iid, user, exit");
+					System.out
+					.println("Type the command you want");
 				}
 				if (s.equals("show"))
 					consolePrintInterests();
@@ -41,13 +46,14 @@ public class InterestStorageManager {
 
 	private static void consoleAddInterest(BufferedReader br)
 			throws IOException {
-		System.out.println("- enter ClientId: ");
+		System.out.println("At the moment you can add interests and phrases only in English");
+		System.out.println("- Enter ClientId: ");
 		String clientId = br.readLine().trim();
-		System.out.println("- enter ClientName: ");
+		System.out.println("- Enter ClientName: ");
 		String clientName = br.readLine().trim();
-		System.out.println("- enter interestId: ");
+		System.out.println("- Enter interestId: ");
 		String interestId = br.readLine().trim();
-		System.out.println("- enter interest topic name: ");
+		System.out.println("- Enter interest topic name: ");
 		String interestTopic = br.readLine().trim();
 
 		Interest interest = new Interest(interestId, interestTopic);
