@@ -55,7 +55,7 @@ public class Acquisition implements Runnable {
 	private volatile static int windowSize;
 	private volatile static Window window;
 	private volatile static Query query;
-	private static boolean simulating;
+
 
 	private static Thread t_ac;
 	private static Thread t_tl;
@@ -70,8 +70,6 @@ public class Acquisition implements Runnable {
 				.readConfigurationParameter("AcquisitionMinWindowLength")) * 60 * 1000;
 		windowSize = Integer.valueOf(ConfigMgr
 				.readConfigurationParameter("AcquisitionWindowSize"));
-		simulating = Boolean.valueOf(ConfigMgr
-				.readConfigurationParameter("UseSimulator"));
 		minNumberOfTweets = Integer.valueOf(ConfigMgr
 				.readConfigurationParameter("AcquisitionMinNumberOfTweets"));
 		minNewPhraseScore = Double.valueOf(ConfigMgr
@@ -258,15 +256,12 @@ public class Acquisition implements Runnable {
 			client.close();
 			return Double.valueOf(responseParts[1]);
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Connection with the knowledge base failed. Wait for the calculation of new potential phrases");
 		}
 
 		return .5;
 	}
 
-	public static boolean isSimulating() {
-		return simulating;
-	}
 
 	public static void setInterest(Interest interest) {
 		Acquisition.interest = interest;

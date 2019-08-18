@@ -91,7 +91,7 @@ public class Window implements Runnable {
 		int windowSize = Acquisition.getWindowSize();
 		if (isOpen()
 				&& (statistics.relevantTweetCount.get() >= windowSize)
-				&& (Acquisition.isSimulating() || getLength() > Acquisition.minWindowLength)) {
+				&& (getLength() > Acquisition.minWindowLength)) {
 			close();
 		}
 
