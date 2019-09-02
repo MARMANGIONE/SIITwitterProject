@@ -1,10 +1,8 @@
 package ta;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import lang.EnglishClassifier;
 import lang.ItalianClassifier;
@@ -245,18 +243,23 @@ public class Acquisition implements Runnable {
 
 	public static double getTermCommonness(String term) {
 		try {
-			Socket client = new Socket(termCommonnessHost, termCommonnessPort);
-			DataOutputStream out = new DataOutputStream(
-					client.getOutputStream());
-			out.writeUTF(term.trim());
-			InputStream inFromServer = client.getInputStream();
-			DataInputStream in = new DataInputStream(inFromServer);
-			String response = in.readUTF();
-			String[] responseParts = response.split("\t");
-			client.close();
-			return Double.valueOf(responseParts[1]);
+			InputStream in = EnglishClassifier.class
+					.getResourceAsStream("/output_terms.csv");
+			BufferedReader bufferedReader = new BufferedReader(
+					new InputStreamReader(in));
+			String line = null;
+			while ((line = bufferedReader.readLine()) != null) {
+				String valueSearched = line.split(",")[0];
+				if (valueSearched == term) {
+					double valueIDF = Double.parseDouble(line.split(",")[3]);
+					return valueIDF;
+				}
+				
+			}
+			bufferedReader.close();
+			in.close();
 		} catch (IOException e) {
-			System.out.println("Connection with the knowledge base failed. Wait for the calculation of new potential phrases");
+			e.printStackTrace();
 		}
 
 		return .5;
@@ -269,3 +272,4 @@ public class Acquisition implements Runnable {
 	}
 
 }
+
