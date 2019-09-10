@@ -1,4 +1,4 @@
-<b>TAS: tweet acquisition system</b>
+## TAS: tweet acquisition system
 
 This version of the Mehdi Sadri code doesn't have the dimple library and includes natural language processing inside.
 

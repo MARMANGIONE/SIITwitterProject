@@ -1,6 +1,12 @@
 package ta;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -23,6 +29,12 @@ public class Window implements Runnable {
 	private static final int executerTimeOutHours = 5;
 	private static final int workerPoolSize = 5;
 	private static final int pollTimeout = 10;
+	
+	private static Date date = new Date() ;
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
+	private static File file = new File("src/main/resources/tweets/" + dateFormat.format(date) + ".txt") ;
+	private static BufferedWriter writer;
+	
 
 	private Thread t_cw;
 
@@ -49,6 +61,12 @@ public class Window implements Runnable {
 		t_cw = new Thread(this);
 		t_cw.setName("t_cw");
 		topEntities = new LinkedList<String>();
+		try {
+			writer = new BufferedWriter(new FileWriter(file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void open() {
@@ -64,6 +82,12 @@ public class Window implements Runnable {
 			notifyAll();
 		}
 		logger.info("Window Size (secs):	" + (double) getLength() / 1000);
+		try {
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void finish() {
@@ -89,6 +113,15 @@ public class Window implements Runnable {
 
 	public void addTweet(Tweet tweet) {
 		int windowSize = Acquisition.getWindowSize();
+			try {
+				System.out.println(tweet.getText());
+				writer.write(tweet.getText());
+				writer.newLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		if (isOpen()
 				&& (statistics.relevantTweetCount.get() >= windowSize)
 				&& (getLength() > Acquisition.minWindowLength)) {

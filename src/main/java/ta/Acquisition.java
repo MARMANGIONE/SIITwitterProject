@@ -243,6 +243,7 @@ public class Acquisition implements Runnable {
 
 	public static double getTermCommonness(String term) {
 		try {
+			System.out.println("I'm calculating the IDF for the term " + term);
 			InputStream in = EnglishClassifier.class
 					.getResourceAsStream("/output_terms.csv");
 			BufferedReader bufferedReader = new BufferedReader(

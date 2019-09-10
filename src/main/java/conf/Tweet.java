@@ -67,7 +67,6 @@ public class Tweet {
 		if (terms == null) {
 			terms = new HashSet<String>();
 			String text = getStatus().getText();
-
 			for (URLEntity url : getStatus().getURLEntities()) {
 				String urltext = url.getExpandedURL().replace("http", "")
 						.replace("https", "").replace("www", "");
